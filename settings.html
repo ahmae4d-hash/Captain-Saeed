@@ -357,16 +357,14 @@ const settings = loadSett();
   const pp = settings.print_pages || 1;
   setPrintPages(pp, false);
 
-  // Password fields - enable new/confirm when old is verified
+// Show live feedback on old password field
   document.getElementById('oldPass').addEventListener('input', function(){
     const correct = localStorage.getItem(STORE_PASS) || '123';
+    const msg = document.getElementById('pass-msg');
+    if(this.value.length === 0){ msg.textContent=''; return; }
     const ok = this.value === correct;
-    document.getElementById('newPass').disabled = !ok;
-    document.getElementById('confirmPass').disabled = !ok;
-    document.getElementById('pass-msg').textContent = this.value.length > 0
-      ? (ok ? '✅ كلمة المرور صحيحة' : '❌ كلمة المرور غلط')
-      : '';
-    document.getElementById('pass-msg').style.color = ok ? 'var(--success)' : 'var(--danger)';
+   msg.textContent = ok ? '✅ كلمة المرور الحالية صحيحة' : '❌ كلمة المرور الحالية غلط';
+    msg.style.color = ok ? 'var(--success)' : 'var(--danger)';
   });
 })();
 
