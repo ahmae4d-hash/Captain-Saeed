@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>الإعدادات - منظومة الكابتن سعيد</title>
+<style>
+:root{--bg:#f0f4f8;--surface:#fff;--surface2:#f1f5f9;--border:#94a3b8;--text:#0f172a;--text-muted:#475569;--accent:#f59e0b;--primary:#1e40af;--primary-light:#3b82f6;--danger:#dc2626;--success:#16a34a;--shadow:0 4px 20px rgba(0,0,0,.08);--radius:14px;--header-bg:#1e3a8a;--header-text:#fff;--input-bg:#fff;--modal-bg:#fff;}
+[data-theme="dark"]{--bg:#0a0f1e;--surface:#111827;--surface2:#1e293b;--border:#334155;--text:#f1f5f9;--text-muted:#94a3b8;--accent:#fbbf24;--primary:#3b82f6;--primary-light:#60a5fa;--danger:#ef4444;--success:#22c55e;--shadow:0 4px 24px rgba(0,0,0,.4);--header-bg:#0f172a;--header-text:#fbbf24;--input-bg:#1e293b;--modal-bg:#1e293b;}
+[data-theme="ocean"]{--bg:#e0f2fe;--surface:#f0f9ff;--surface2:#bae6fd;--border:#7dd3fc;--text:#0c4a6e;--text-muted:#0369a1;--accent:#0ea5e9;--primary:#0284c7;--primary-light:#38bdf8;--danger:#dc2626;--success:#0d9488;--shadow:0 4px 20px rgba(14,165,233,.15);--header-bg:#0c4a6e;--header-text:#e0f2fe;--input-bg:#f0f9ff;--modal-bg:#f0f9ff;}
+[data-theme="forest"]{--bg:#f0fdf4;--surface:#fff;--surface2:#dcfce7;--border:#86efac;--text:#14532d;--text-muted:#166534;--accent:#22c55e;--primary:#16a34a;--primary-light:#4ade80;--danger:#dc2626;--success:#15803d;--shadow:0 4px 20px rgba(22,163,74,.12);--header-bg:#14532d;--header-text:#f0fdf4;--input-bg:#fff;--modal-bg:#fff;}
+[data-theme="warm"]{--bg:#fffbeb;--surface:#fff;--surface2:#fef3c7;--border:#fbbf24;--text:#78350f;--text-muted:#92400e;--accent:#f59e0b;--primary:#d97706;--primary-light:#fbbf24;--danger:#dc2626;--success:#16a34a;--shadow:0 4px 20px rgba(245,158,11,.15);--header-bg:#78350f;--header-text:#fffbeb;--input-bg:#fff;--modal-bg:#fff;}
+*{box-sizing:border-box;margin:0;padding:0;font-family:"Segoe UI",Cairo,Arial,sans-serif;transition:background-color .3s,color .3s,border-color .3s;}
+body{background:var(--bg);color:var(--text);min-height:100vh;}
+::-webkit-scrollbar{width:6px;} ::-webkit-scrollbar-track{background:var(--surface2);} ::-webkit-scrollbar-thumb{background:var(--primary);border-radius:3px;}
+
+/* HEADER */
+.settings-header{background:var(--header-bg);color:var(--header-text);padding:14px 20px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.3);}
+.back-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:inherit;padding:8px 16px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:700;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:6px;}
+.back-btn:hover{background:rgba(255,255,255,.25);}
+.header-title-set{font-size:clamp(17px,4vw,22px);font-weight:900;color:#fbbf24;}
+
+/* CONTAINER */
+.settings-body{max-width:800px;margin:0 auto;padding:clamp(12px,3vw,28px);}
+
+/* CARD */
+.s-card{background:var(--surface);border-radius:var(--radius);padding:22px 20px;margin-bottom:18px;border:1px solid var(--border);box-shadow:var(--shadow);}
+.s-card-title{font-size:16px;font-weight:900;color:var(--primary);margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:8px;}
+.s-card-title .icon{font-size:20px;}
+
+/* THEME GRID */
+.theme-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;}
+.theme-btn{border:3px solid var(--border);border-radius:12px;padding:14px 10px;cursor:pointer;font-size:13px;font-weight:700;text-align:center;transition:all .2s;background:var(--surface2);color:var(--text);}
+.theme-btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.12);}
+.theme-btn.active{border-color:var(--primary);box-shadow:0 0 0 3px rgba(30,64,175,.2);}
+.theme-preview{width:100%;height:40px;border-radius:8px;margin-bottom:8px;display:block;}
+.t-light .theme-preview{background:linear-gradient(135deg,#f0f4f8 50%,#1e40af 50%);}
+.t-dark .theme-preview{background:linear-gradient(135deg,#0a0f1e 50%,#3b82f6 50%);}
+.t-ocean .theme-preview{background:linear-gradient(135deg,#e0f2fe 50%,#0284c7 50%);}
+.t-forest .theme-preview{background:linear-gradient(135deg,#f0fdf4 50%,#16a34a 50%);}
+.t-warm .theme-preview{background:linear-gradient(135deg,#fffbeb 50%,#d97706 50%);}
+
+/* FORM ELEMENTS */
+.s-field{margin-bottom:14px;}
+.s-field label{display:block;font-size:13px;font-weight:700;color:var(--text-muted);margin-bottom:6px;}
+.s-input{width:100%;padding:12px 14px;border-radius:10px;border:2px solid var(--border);background:var(--input-bg);color:var(--text);font-size:15px;font-weight:700;outline:none;transition:border-color .2s;}
+.s-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(30,64,175,.1);}
+.s-input[type="number"]{text-align:center;}
+
+/* BUTTONS */
+.s-btn{padding:12px 22px;border-radius:10px;border:none;cursor:pointer;font-size:14px;font-weight:900;transition:all .2s;display:inline-flex;align-items:center;gap:7px;}
+.s-btn:hover{filter:brightness(1.1);transform:translateY(-1px);}
+.s-btn:active{transform:translateY(0);}
+.s-btn-primary{background:linear-gradient(135deg,#1d4ed8,#1e40af);color:#fff;}
+.s-btn-danger{background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;}
+.s-btn-success{background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;}
+.s-btn-gray{background:linear-gradient(135deg,#475569,#334155);color:#fff;}
+.s-btn-whatsapp{background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+
+/* TOGGLE SWITCH */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;}
+.toggle-label{font-size:14px;font-weight:700;color:var(--text);}
+.toggle-sub{font-size:12px;color:var(--text-muted);margin-top:2px;}
+.toggle{position:relative;width:52px;height:28px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;inset:0;background:#94a3b8;border-radius:28px;cursor:pointer;transition:.3s;}
+.toggle-slider::before{content:'';position:absolute;width:22px;height:22px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.3s;}
+input:checked+.toggle-slider{background:var(--primary);}
+input:checked+.toggle-slider::before{transform:translateX(24px);}
+
+/* MULTIPLIER TABLE */
+.mult-table{width:100%;border-collapse:collapse;}
+.mult-table th,.mult-table td{padding:10px 12px;text-align:center;border-bottom:1px solid var(--border);font-size:14px;}
+.mult-table th{font-weight:900;color:var(--text-muted);font-size:12px;background:var(--surface2);}
+.mult-table td:first-child{text-align:right;font-weight:700;color:var(--text);}
+.mult-input{width:80px;padding:7px;border-radius:8px;border:2px solid var(--border);background:var(--input-bg);color:var(--text);text-align:center;font-size:15px;font-weight:900;outline:none;}
+.mult-input:focus{border-color:var(--primary);}
+.mult-input[readonly]{background:var(--surface2);color:var(--text-muted);cursor:default;}
+
+/* ABOUT */
+.about-logo{text-align:center;margin-bottom:16px;}
+.about-logo .big-icon{font-size:60px;display:block;margin-bottom:8px;}
+.about-name{font-size:20px;font-weight:900;color:var(--primary);}
+.about-version{font-size:13px;color:var(--text-muted);margin-top:4px;}
+.about-desc{font-size:14px;color:var(--text-muted);line-height:1.7;text-align:center;margin-top:12px;}
+.about-info{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
+.about-item{background:var(--surface2);border-radius:10px;padding:12px;text-align:center;}
+.about-item-val{font-size:18px;font-weight:900;color:var(--primary);}
+.about-item-label{font-size:11px;color:var(--text-muted);margin-top:3px;}
+
+/* CONTACT */
+.contact-card{display:flex;align-items:center;gap:14px;background:var(--surface2);border-radius:12px;padding:16px;}
+.contact-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#25d366,#128c7e);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;}
+.contact-name{font-size:16px;font-weight:900;color:var(--text);}
+.contact-phone{font-size:13px;color:var(--text-muted);margin-top:3px;direction:ltr;text-align:right;}
+
+/* PRINT SECTION */
+.print-options{display:flex;gap:12px;flex-wrap:wrap;}
+.print-opt{flex:1;min-width:80px;border:2px solid var(--border);border-radius:10px;padding:14px 8px;cursor:pointer;text-align:center;font-size:14px;font-weight:700;transition:all .2s;background:var(--surface2);color:var(--text);}
+.print-opt:hover{border-color:var(--primary);}
+.print-opt.active{border-color:var(--primary);background:var(--primary);color:#fff;}
+.print-opt .opt-num{font-size:28px;font-weight:900;display:block;margin-bottom:4px;}
+
+/* TOAST */
+#toast-set{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:12px 26px;border-radius:30px;font-weight:700;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;box-shadow:0 6px 20px rgba(0,0,0,.3);}
+#toast-set.show{opacity:1;}
+
+/* MODAL */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:10000;justify-content:center;align-items:center;backdrop-filter:blur(4px);}
+.modal-ov.show{display:flex;}
+.modal-box{background:var(--modal-bg);padding:30px;border-radius:20px;width:min(360px,92vw);border:2px solid var(--primary);box-shadow:0 20px 60px rgba(0,0,0,.35);animation:su .25s ease;}
+@keyframes su{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.modal-box h3{font-size:18px;font-weight:900;color:var(--primary);margin-bottom:18px;text-align:center;}
+.modal-btns{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+</style>
+</head>
+<body>
+
+<header class="settings-header">
+  <a class="back-btn" href="index.html">← رجوع</a>
+  <div class="header-title-set">⚙️ الإعدادات</div>
+</header>
+
+<div class="settings-body">
+
+  <!-- 1. THEMES -->
+  <div class="s-card">
+    <div class="s-card-title"><span class="icon">🎨</span> تغيير الثيم</div>
+    <div class="theme-grid">
+      <div class="theme-btn t-light" onclick="setTheme('light')" id="th-light">
+        <span class="theme-preview"></span>☀️ فاتح
+      </div>
+      <div class="theme-btn t-dark" onclick="setTheme('dark')" id="th-dark">
+        <span class="theme-preview"></span>🌙 داكن
+      </div>
+      <div class="theme-btn t-ocean" onclick="setTheme('ocean')" id="th-ocean">
+        <span class="theme-preview"></span>🌊 أزرق المحيط
+      </div>
+      <div class="theme-btn t-forest" onclick="setTheme('forest')" id="th-forest">
+        <span class="theme-preview"></span>🌿 أخضر الغابة
+      </div>
+      <div class="theme-btn t-warm" onclick="setTheme('warm')" id="th-warm">
+        <span class="theme-preview"></span>🌅 دافئ
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. PASSWORD -->
+  <div class="s-card">
+    <div class="s-card-title"><span class="icon">🔐</span> تغيير كلمة المرور</div>
+    <div class="s-field">
+      <label>كلمة المرور الحالية</label>
+      <input class="s-input" type="password" id="oldPass" placeholder="أدخل كلمة المرور الحالية..."/>
+    </div>
+    <div class="s-field">
+      <label>كلمة المرور الجديدة</label>
+      <input class="s-input" type="password" id="newPass" placeholder="أدخل كلمة المرور الجديدة..." disabled id="newPassInput"/>
+    </div>
+    <div class="s-field">
+      <label>تأكيد كلمة المرور الجديدة</label>
+      <input class="s-input" type="password" id="confirmPass" placeholder="أعد كتابة كلمة المرور..." disabled/>
+    </div>
+    <div class="btn-row">
+      <button class="s-btn s-btn-primary" onclick="changePassword()">💾 حفظ كلمة المرور</button>
+    </div>
+    <div id="pass-msg" style="margin-top:10px;font-size:14px;font-weight:700;min-height:18px;"></div>
+  </div>
+
+  <!-- 3. DESKTOP MODE -->
+  <div class="s-card">
+    <div class="s-card-title"><span class="icon">🖥️</span> وضع الكمبيوتر على الهاتف</div>
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">تفعيل وضع الكمبيوتر</div>
+        <div class="toggle-sub">يجعل الموقع يظهر بعرض شاشة الكمبيوتر داخل الهاتف</div>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="desktopMode" onchange="toggleDesktopMode()"/>
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- 4. ADVANCED SETTINGS -->
+  <div class="s-card">
+    <div class="s-card-title"><span class="icon">🔧</span> الإعدادات المتقدمة - مضاريب الحسابات</div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">عند إدخال عدد الحركات، يتم ضرب الرقم تلقائياً في هذه المضاريب لكل خانة.</p>
+    <div style="overflow-x:auto;">
+      <table class="mult-table">
+        <thead>
+          <tr>
+            <th>الخانة</th>
+            <th>المضروب الحالي</th>
+            <th>مثال: 5 حركات</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>أمانات</td>
+            <td><input class="mult-input" type="number" id="mult_a" min="0" oninput="updateExample('mult_a','ex_a')"/> </td>
+            <td id="ex_a" style="color:var(--primary);font-weight:900;">-</td>
+          </tr>
+          <tr>
+            <td>ط.شهيد</td>
+            <td><input class="mult-input" type="number" id="mult_s" min="0" oninput="updateExample('mult_s','ex_s')"/></td>
+            <td id="ex_s" style="color:var(--primary);font-weight:900;">-</td>
+          </tr>
+          <tr>
+            <td>ط.شرطة</td>
+            <td><input class="mult-input" type="number" id="mult_p" min="0" oninput="updateExample('mult_p','ex_p')"/></td>
+            <td id="ex_p" style="color:var(--primary);font-weight:900;">-</td>
+          </tr>
+          <tr>
+            <td>مسنين</td>
+            <td><input class="mult-input" type="number" id="mult_old" min="0" oninput="updateExample('mult_old','ex_old')"/></td>
+            <td id="ex_old" style="color:var(--primary);font-weight:900;">-</td>
+          </tr>
+          <tr>
+            <td>إعاقة</td>
+            <td><input class="mult-input" type="number" id="mult_dis" min="0" oninput="updateExample('mult_dis','ex_dis')"/></td>
+            <td id="ex_dis" style="color:var(--primary);font-weight:900;">-</td>
+          </tr>
+          <tr style="background:var(--surface2);">
+            <td>⚙️ ميكنة (ثابت للصف)</td>
+            <td><input class="mult-input" type="number" id="mech_val" min="0" oninput="updateMechPreview()"/></td>
+            <td id="ex_mech" style="color:var(--text-muted);font-size:12px;">قيمة ثابتة لكل صف</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="btn-row" style="margin-top:16px;">
+      <button class="s-btn s-btn-success" onclick="saveMultipliers()">💾 حفظ المضاريب</button>
+      <button class="s-btn s-btn-gray" onclick="resetMultipliers()">↺ إعادة الافتراضي</button>
+    </div>
+  </div>
+
+  <!-- 5. PRINT PAGES -->
+  <div class="s-card">
+    <div class="s-card-title"><span class="icon">🖨️</span> إعدادات الطباعة</div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">اختر عدد الأوراق عند الطباعة:</p>
+    <div class="print-options" id="printOpts">
+      <div class="print-opt" onclick="setPrintPages(1)" id="pp-1"><span class="opt-num">1</span>ورقة واحدة</div>
+      <div class="print-opt" onclick="setPrintPages(2)" id="pp-2"><span class="opt-num">2</span>ورقتين</div>
+      <div class="print-opt" onclick="setPrintPages(3)" id="pp-3"><span class="opt-num">3</span>ثلاث أوراق</div>
+      <div class="print-opt" onclick="setPrintPages(4)" id="pp-4"><span class="opt-num">4</span>أربع أوراق</div>
+    </div>
+    <div class="btn-row" style="margin-top:14px;">
+      <button class="s-btn s-btn-primary" onclick="savePrintSettings()">💾 حفظ إعدادات الطباعة</button>
+    </div>
+  </div>
+
+  <!-- 6. FACTORY RESET -->
+  <div class="s-card">
+    <div class="s-card-title"><span class="icon">🗑️</span> إعادة ضبط المصنع</div>
+    <p style="font-size:14px;color:var(--text-muted);line-height:1.7;margin-bottom:16px;">
+      ⚠️ هذا الإجراء سيحذف جميع البيانات والملفات المحفوظة والإعدادات وإعادتها للقيم الافتراضية. <strong style="color:var(--danger);">لا يمكن التراجع عن هذا الإجراء.</strong>
+    </p>
+    <div class="btn-row">
+      <button class="s-btn s-btn-danger" onclick="openResetModal()">🗑️ إعادة ضبط المصنع</button>
+    </div>
+  </div>
+
+  <!-- 7. ABOUT -->
+  <div class="s-card">
+    <div class="s-card-title"><span class="icon">ℹ️</span> معلومات عن التطبيق</div>
+    <div class="about-logo">
+      <span class="big-icon">⚓</span>
+      <div class="about-name">منظومة الكابتن سعيد</div>
+      <div class="about-version">الإصدار 2.0 · 2025</div>
+    </div>
+    <div class="about-desc">
+      نظام متكامل لإدارة الحركات المالية وتتبع البيانات،<br/>
+      مصمم خصيصاً لتسهيل عمليات الإدخال والحسابات التلقائية.
+    </div>
+    <div class="about-info">
+      <div class="about-item"><div class="about-item-val">30</div><div class="about-item-label">صف في كل ملف</div></div>
+      <div class="about-item"><div class="about-item-val">∞</div><div class="about-item-label">ملفات محفوظة</div></div>
+      <div class="about-item"><div class="about-item-val">5</div><div class="about-item-label">ثيمات مدعومة</div></div>
+      <div class="about-item"><div class="about-item-val">PWA</div><div class="about-item-label">تطبيق ويب تقدمي</div></div>
+    </div>
+  </div>
+
+  <!-- 8. CONTACT -->
+  <div class="s-card">
+    <div class="s-card-title"><span class="icon">💬</span> تواصل مع المطور</div>
+    <div class="contact-card">
+      <div class="contact-avatar">👨‍💻</div>
+      <div>
+        <div class="contact-name">أحمد سعيد</div>
+        <div class="contact-phone" dir="ltr">+00908440039</div>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:14px;">
+      <a class="s-btn s-btn-whatsapp" href="https://wa.me/00908440039" target="_blank" rel="noopener" style="text-decoration:none;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        واتساب - أحمد سعيد
+      </a>
+    </div>
+  </div>
+
+</div><!-- /settings-body -->
+
+<!-- RESET MODAL -->
+<div class="modal-ov" id="resetModal">
+  <div class="modal-box">
+    <h3>⚠️ تأكيد إعادة الضبط</h3>
+    <p style="color:var(--text-muted);font-size:14px;line-height:1.7;text-align:center;margin-bottom:6px;">
+      سيتم حذف جميع البيانات والإعدادات نهائياً.<br/>
+      هل أنت متأكد من المتابعة؟
+    </p>
+    <div class="modal-btns">
+      <button class="s-btn s-btn-danger" style="justify-content:center;" onclick="doFactoryReset()">🗑️ نعم، أعد الضبط</button>
+      <button class="s-btn s-btn-gray" style="justify-content:center;" onclick="closeModal('resetModal')">إلغاء ✕</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-set"></div>
+
+<script>
+// =====================
+// STORAGE HELPERS
+// =====================
+const STORE_SETTINGS = 'cs_settings_v1';
+const STORE_THEME    = 'cs_theme';
+const STORE_PASS     = 'cs_password';
+const STORE_ROWS     = 'cs_rows_v1';
+const STORE_ARCH     = 'cs_arch_v1';
+
+function loadSett(){try{return JSON.parse(localStorage.getItem(STORE_SETTINGS))||{};}catch{return {};}}
+function saveSett(s){localStorage.setItem(STORE_SETTINGS,JSON.stringify(s));}
+
+// =====================
+// INIT
+// =====================
+const settings = loadSett();
+
+(function init(){
+  // Apply theme
+  const th = localStorage.getItem(STORE_THEME) || 'dark';
+  applyTheme(th, false);
+
+  // Desktop mode checkbox
+  document.getElementById('desktopMode').checked = !!settings.desktopMode;
+
+  // Multipliers
+  document.getElementById('mult_a').value   = settings.mult_a   !== undefined ? settings.mult_a   : 100;
+  document.getElementById('mult_s').value   = settings.mult_s   !== undefined ? settings.mult_s   : 5;
+  document.getElementById('mult_p').value   = settings.mult_p   !== undefined ? settings.mult_p   : 15;
+  document.getElementById('mult_old').value = settings.mult_old !== undefined ? settings.mult_old : 5;
+  document.getElementById('mult_dis').value = settings.mult_dis !== undefined ? settings.mult_dis : 5;
+  document.getElementById('mech_val').value = settings.mech_val !== undefined ? settings.mech_val : 35;
+  updateAllExamples();
+
+  // Print pages
+  const pp = settings.print_pages || 1;
+  setPrintPages(pp, false);
+
+  // Password fields - enable new/confirm when old is verified
+  document.getElementById('oldPass').addEventListener('input', function(){
+    const correct = localStorage.getItem(STORE_PASS) || '123';
+    const ok = this.value === correct;
+    document.getElementById('newPass').disabled = !ok;
+    document.getElementById('confirmPass').disabled = !ok;
+    document.getElementById('pass-msg').textContent = this.value.length > 0
+      ? (ok ? '✅ كلمة المرور صحيحة' : '❌ كلمة المرور غلط')
+      : '';
+    document.getElementById('pass-msg').style.color = ok ? 'var(--success)' : 'var(--danger)';
+  });
+})();
+
+// =====================
+// THEME
+// =====================
+function setTheme(t){
+  applyTheme(t, true);
+}
+function applyTheme(t, toast){
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem(STORE_THEME, t);
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+  const el = document.getElementById('th-'+t);
+  if(el) el.classList.add('active');
+  if(toast) showToast('✅ تم تطبيق الثيم: ' + themeNames[t]);
+}
+const themeNames = {light:'فاتح',dark:'داكن',ocean:'أزرق المحيط',forest:'أخضر الغابة',warm:'دافئ'};
+
+// =====================
+// DESKTOP MODE
+// =====================
+function toggleDesktopMode(){
+  const on = document.getElementById('desktopMode').checked;
+  settings.desktopMode = on;
+  saveSett(settings);
+  if(on){
+    showToast('🖥️ وضع الكمبيوتر مفعّل - سيُطبق عند فتح الصفحة الرئيسية');
+  } else {
+    showToast('📱 تم إلغاء وضع الكمبيوتر');
+  }
+}
+
+// =====================
+// PASSWORD
+// =====================
+function changePassword(){
+  const oldV = document.getElementById('oldPass').value;
+  const newV = document.getElementById('newPass').value;
+  const confV = document.getElementById('confirmPass').value;
+  const msg = document.getElementById('pass-msg');
+  const correct = localStorage.getItem(STORE_PASS) || '123';
+
+  if(oldV !== correct){ msg.textContent='❌ كلمة المرور الحالية غلط'; msg.style.color='var(--danger)'; return; }
+  if(!newV){ msg.textContent='⚠️ أدخل كلمة المرور الجديدة'; msg.style.color='var(--danger)'; return; }
+  if(newV !== confV){ msg.textContent='❌ كلمة المرور الجديدة غير متطابقة'; msg.style.color='var(--danger)'; return; }
+  if(newV.length < 3){ msg.textContent='⚠️ كلمة المرور يجب أن تكون 3 أحرف على الأقل'; msg.style.color='var(--danger)'; return; }
+
+  localStorage.setItem(STORE_PASS, newV);
+  document.getElementById('oldPass').value = '';
+  document.getElementById('newPass').value = '';
+  document.getElementById('confirmPass').value = '';
+  document.getElementById('newPass').disabled = true;
+  document.getElementById('confirmPass').disabled = true;
+  msg.textContent = '✅ تم تغيير كلمة المرور بنجاح!';
+  msg.style.color = 'var(--success)';
+  showToast('✅ تم تغيير كلمة المرور');
+}
+
+// =====================
+// MULTIPLIERS
+// =====================
+function updateExample(inputId, exId){
+  const val = parseFloat(document.getElementById(inputId).value) || 0;
+  document.getElementById(exId).textContent = 5 * val;
+}
+function updateMechPreview(){
+  // mech is fixed per row
+}
+function updateAllExamples(){
+  updateExample('mult_a','ex_a');
+  updateExample('mult_s','ex_s');
+  updateExample('mult_p','ex_p');
+  updateExample('mult_old','ex_old');
+  updateExample('mult_dis','ex_dis');
+}
+function saveMultipliers(){
+  settings.mult_a   = parseFloat(document.getElementById('mult_a').value)   || 0;
+  settings.mult_s   = parseFloat(document.getElementById('mult_s').value)   || 0;
+  settings.mult_p   = parseFloat(document.getElementById('mult_p').value)   || 0;
+  settings.mult_old = parseFloat(document.getElementById('mult_old').value) || 0;
+  settings.mult_dis = parseFloat(document.getElementById('mult_dis').value) || 0;
+  settings.mech_val = parseFloat(document.getElementById('mech_val').value) || 35;
+  saveSett(settings);
+  showToast('✅ تم حفظ المضاريب بنجاح');
+}
+function resetMultipliers(){
+  document.getElementById('mult_a').value   = 100;
+  document.getElementById('mult_s').value   = 5;
+  document.getElementById('mult_p').value   = 15;
+  document.getElementById('mult_old').value = 5;
+  document.getElementById('mult_dis').value = 5;
+  document.getElementById('mech_val').value = 35;
+  updateAllExamples();
+  showToast('↺ تم إعادة المضاريب للقيم الافتراضية');
+}
+
+// =====================
+// PRINT PAGES
+// =====================
+let selectedPages = 1;
+function setPrintPages(n, save=true){
+  selectedPages = n;
+  document.querySelectorAll('.print-opt').forEach(el => el.classList.remove('active'));
+  const el = document.getElementById('pp-'+n);
+  if(el) el.classList.add('active');
+  if(save){settings.print_pages = n; saveSett(settings);}
+}
+function savePrintSettings(){
+  settings.print_pages = selectedPages;
+  saveSett(settings);
+  showToast('✅ تم حفظ إعداد الطباعة: '+selectedPages+' '+(selectedPages===1?'ورقة':'أوراق'));
+}
+
+// =====================
+// FACTORY RESET
+// =====================
+function openResetModal(){ document.getElementById('resetModal').classList.add('show'); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('.modal-ov').forEach(el=>{
+  el.addEventListener('click',function(e){if(e.target===this)this.classList.remove('show');});
+});
+function doFactoryReset(){
+  const keys = [STORE_SETTINGS, STORE_THEME, STORE_PASS, STORE_ROWS, STORE_ARCH, 'cs_desktop'];
+  keys.forEach(k => localStorage.removeItem(k));
+  localStorage.clear();
+  closeModal('resetModal');
+  showToast('✅ تم إعادة الضبط - جاري التحويل...', 2500);
+  setTimeout(() => { window.location.href = 'index.html'; }, 2600);
+}
+
+// =====================
+// TOAST
+// =====================
+let toastT;
+function showToast(msg, dur=3000){
+  const el = document.getElementById('toast-set');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => el.classList.remove('show'), dur);
+}
+</script>
+</body>
+</html>
